@@ -1,3 +1,7 @@
+**/.DS_STORE
+slic3r2aerotech
+**/slic3r2aerotech
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
