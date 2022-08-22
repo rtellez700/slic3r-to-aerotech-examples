@@ -16,7 +16,7 @@ Primary ; sets primary units mm and s
 G65 F2000; accel speed mm/s^2
 G66 F2000;accel speed mm/s^2
 
-Call setPress P5 Q40.0 ; tool 0
+Call setPress P5 Q50.0 ; tool 0
 
 G90 ;use absolute coordinates 
 MINUTES
@@ -562,61 +562,63 @@ G1 Z10.500 F600.000 ; lift Z
 ; top_solid_layers = 0
 SECONDS
 
+;#################################### Code ##########################################
+
 M2
 
-;##########Functions############;
-DFS setPress
-
-        $strtask1 = DBLTOSTR( $P, 0 )
+;##########Nordson Pressure Box Functions############;
+DFS setPress        
+         
+        $strtask1 = DBLTOSTR( $P, 0 )            
         $strtask1 = "COM" + $strtask1
         $hFile = FILEOPEN $strtask1, 2
         COMMINIT $hFile, "baud=115200 parity=N data=8 stop=1"
         COMMSETTIMEOUT $hFile, -1, -1, 1000
-
-        $press = $Q * 10.0
-        $strtask2 = DBLTOSTR( $press , 0 )
-
-
-        $length = STRLEN( $strtask2 )
+                             
+        $press = $Q * 10.0                             
+        $strtask2 = DBLTOSTR( $press , 0 )  
+      
+      
+        $length = STRLEN( $strtask2 )      
         WHILE $length < 4.0
-                $strtask2 = "0" + $strtask2
-                $length = STRLEN( $strtask2 )
+                $strtask2 = "0" + $strtask2    
+                $length = STRLEN( $strtask2 ) 
         ENDWHILE
 
 
         $strtask2 = "08PS  " + $strtask2
-
-        $cCheck = 0.00
+                                    
+        $cCheck = 0.00     
         $lame = STRTOASCII ($strtask2, 0)
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 1)
+        $lame = STRTOASCII( $strtask2, 1) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 2)
+        $lame = STRTOASCII( $strtask2, 2) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 3)
+        $lame = STRTOASCII( $strtask2, 3) 
         $cCheck = $cCheck - $lame
         $lame = STRTOASCII( $strtask2, 4)
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 5)
+        $lame = STRTOASCII( $strtask2, 5) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 6)
+        $lame = STRTOASCII( $strtask2, 6) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 7)
+        $lame = STRTOASCII( $strtask2, 7) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 8)
+        $lame = STRTOASCII( $strtask2, 8) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 9)
+        $lame = STRTOASCII( $strtask2, 9)  
         $cCheck = $cCheck - $lame
-
+                        
         WHILE( $cCheck) < 0
                 $cCheck = $cCheck + 256
-        ENDWHILE
+        ENDWHILE                        
 
 
-        $strtask3 = makestring "{#H}" $cCheck
+        $strtask3 = makestring "{#H}" $cCheck   
         $strtask3 = STRUPR( $strtask3 )
         $strtask2 = "" + $strtask2 + $strtask3 + ""
-
+            
         FILEWRITE $hFile ""
         FILEWRITE $hFile $strtask2
         FILEWRITE $hFile ""
@@ -627,9 +629,71 @@ DFS setPress
 
 ENDDFS
 
-DFS togglePress
+DFS setVac      
+         
+        $strtask1 = DBLTOSTR( $P, 0 )            
+        $strtask1 = "COM" + $strtask1
+        $hFile = FILEOPEN $strtask1, 2
+        COMMINIT $hFile, "baud=115200 parity=N data=8 stop=1"
+        COMMSETTIMEOUT $hFile, -1, -1, 1000
+                             
+        $vacpress = $Q * 10.0                             
+        $strtask2 = DBLTOSTR( $vacpress , 0 )  
+      
+      
+        $length = STRLEN( $strtask2 )      
+        WHILE $length < 4.0
+                $strtask2 = "0" + $strtask2    
+                $length = STRLEN( $strtask2 ) 
+        ENDWHILE
 
-        $strtask1 = DBLTOSTR( $P, 0 )
+
+        $strtask2 = "08VS  " + $strtask2
+                                    
+        $cCheck = 0.00     
+        $lame = STRTOASCII ($strtask2, 0)
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 1) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 2) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 3) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 4)
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 5) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 6) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 7) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 8) 
+        $cCheck = $cCheck - $lame
+        $lame = STRTOASCII( $strtask2, 9)  
+        $cCheck = $cCheck - $lame
+                        
+        WHILE( $cCheck) < 0
+                $cCheck = $cCheck + 256
+        ENDWHILE                        
+
+
+        $strtask3 = makestring "{#H}" $cCheck   
+        $strtask3 = STRUPR( $strtask3 )
+        $strtask2 = "" + $strtask2 + $strtask3 + ""
+            
+        FILEWRITE $hFile ""
+        FILEWRITE $hFile $strtask2
+        FILEWRITE $hFile ""
+
+
+        FILECLOSE $hFile
+
+
+ENDDFS
+
+DFS togglePress        
+         
+        $strtask1 = DBLTOSTR( $P, 0 )            
         $strtask1 = "COM" + $strtask1
         $hFile = FILEOPEN $strtask1, 2
         COMMINIT $hFile, "baud=115200 parity=N data=8 stop=1"
@@ -637,30 +701,30 @@ DFS togglePress
 
 
         $strtask2 = "04DI  "
-
-        $cCheck = 0.00
+                                    
+        $cCheck = 0.00     
         $lame = STRTOASCII ($strtask2, 0)
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 1)
+        $lame = STRTOASCII( $strtask2, 1) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 2)
+        $lame = STRTOASCII( $strtask2, 2) 
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 3)
+        $lame = STRTOASCII( $strtask2, 3) 
         $cCheck = $cCheck - $lame
         $lame = STRTOASCII( $strtask2, 4)
         $cCheck = $cCheck - $lame
-        $lame = STRTOASCII( $strtask2, 5)
+        $lame = STRTOASCII( $strtask2, 5) 
         $cCheck = $cCheck - $lame
-
+                        
         WHILE( $cCheck) < 0
                 $cCheck = $cCheck + 256
-        ENDWHILE
+        ENDWHILE                        
 
 
-        $strtask3 = makestring "{#H}" $cCheck
+        $strtask3 = makestring "{#H}" $cCheck   
         $strtask3 = STRUPR( $strtask3 )
         $strtask2 = "" + $strtask2 + $strtask3 + ""
-
+                  
         FILEWRITE $hFile ""
         FILEWRITE $hFile $strtask2
         FILEWRITE $hFile ""
@@ -671,3 +735,116 @@ DFS togglePress
 
 ENDDFS
 
+;##########Omnicure Functions############;
+DFS omniOn
+
+        $strtask1 = DBLTOSTR( $P, 0 )
+        $strtask1 = "COM" + $strtask1
+        $hFile = FILEOPEN $strtask1, 2
+        COMMINIT $hFile, "baud=19200 parity=N data=8 stop=1"
+        COMMSETTIMEOUT $hFile, -1, -1, 1000
+                
+        FILEWRITENOTERM $hFile "CONN18"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"READY0A",0)
+                FILEWRITENOTERM $hFile "CONN18"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        
+        FILEWRITENOTERM $hFile "OPN40"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"ReceivedBF",0)
+                FILEWRITENOTERM $hFile "OPN40"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        
+        FILEWRITENOTERM $hFile "DCONE1"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"CLOSED42",0)
+                FILEWRITENOTERM $hFile "DCONE1"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        FILECLOSE $hFile
+
+ENDDFS
+
+DFS omniOff
+
+        $strtask1 = DBLTOSTR( $P, 0 )
+        $strtask1 = "COM" + $strtask1
+        $hFile = FILEOPEN $strtask1, 2
+        COMMINIT $hFile, "baud=19200 parity=N data=8 stop=1"
+        COMMSETTIMEOUT $hFile, -1, -1, 1000
+                
+        FILEWRITENOTERM $hFile "CONN18"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"READY0A",0)
+                FILEWRITENOTERM $hFile "CONN18"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        
+        FILEWRITENOTERM $hFile "CLS3A"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"ReceivedBF",0)
+                FILEWRITENOTERM $hFile "CLS3A"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        
+        FILEWRITENOTERM $hFile "DCONE1"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"CLOSED42",0)
+                FILEWRITENOTERM $hFile "DCONE1"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        FILECLOSE $hFile
+        
+ENDDFS
+
+DFS omniSetInt
+
+        $strtask1 = DBLTOSTR( $P, 0 )
+        $strtask1 = "COM" + $strtask1
+        $hFile = FILEOPEN $strtask1, 2
+        COMMINIT $hFile, "baud=19200 parity=N data=8 stop=1"
+        COMMSETTIMEOUT $hFile, -1, -1, 1000
+
+        FILEWRITENOTERM $hFile "CONN18"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"READY0A",0)
+                FILEWRITENOTERM $hFile "CONN18"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+
+        $strtask4 = $strtask4 + ""
+        FILEWRITENOTERM $hFile $strtask4
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"ReceivedBF",0)
+                FILEWRITENOTERM $hFile $strtask4
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+
+        FILEWRITENOTERM $hFile "DCONE1"
+        FILEREAD $hFile, 0, $strtask2
+        WHILE STRCMP($strtask2,"CLOSED42",0)
+                FILEWRITENOTERM $hFile "DCONE1"
+                FILEREAD $hFile, 0, $strtask2
+        ENDWHILE
+        FILECLOSE $hFile
+
+ENDDFS
+
+;##########Alicat Functions############;
+DFS setAlicatPress
+
+        $strtask1 = DBLTOSTR( $P, 0 )
+        $strtask1 = "COM" + $strtask1
+        $hFile = FILEOPEN $strtask1, 2
+        COMMINIT $hFile, "baud=19200 parity=N data=8 stop=1"
+        COMMSETTIMEOUT $hFile, -1, -1, 1000
+                
+        $strtask2 = DBLTOSTR($Q,2)
+        $strtask3 = "AS" + $strtask2 + ""
+        FILEWRITENOTERM $hFile $strtask3
+        FILECLOSE $hFile
+
+ENDDFS
