@@ -1,0 +1,5 @@
+numpy
+matplotlib
+fbs
+pyqt5
+git+https://github.com/rtellez700/mecode_viewer.git
